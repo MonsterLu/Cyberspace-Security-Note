@@ -42,7 +42,7 @@ You have an error in your SQL syntax; check the manual that corresponds to your 
 select * from users where id = ('$id');
 ```
 
-所以判断这是一个数字型sql注入
+所以判断这是一个单引号字符型sql注入
 
 ## 3.2 判断字段的数量
 
