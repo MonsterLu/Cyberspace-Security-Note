@@ -24,7 +24,48 @@
 
 看起来实现注册功能似乎很复杂，让我们分解问题，一步步来解决
 
-首先用HTML完成它能够干的事，创建一个让用户填写账户和密码的表单并能提交给服务器中处理该请求的register.php文件
+首先用HTML完成它能够干的事，创建一个让用户填写账户和密码的表单并能提交给服务器中处理该请求的php脚本
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<head>
+<script>
+function check(){
+var name=document.forms["myForm"]["username"].value;
+var pwd=document.forms["myForm"]["password"].value;
+if (name==null || name==""){
+  alert("用户名或密码为空");
+  return false;
+  }
+if (pwd==null || pwd==""){
+  alert("用户名或密码为空");
+  return false;
+  }
+if(pwd.length < 6){
+  alert("密码长度不能小于6位");
+  return false;
+  }
+}
+</script>
+</head>
+<body>
+<h1>注册测试</h1>
+<form name="myForm" action="register.php" onsubmit="return check();" method="post">
+账户<input type="text" name="username"><br>
+密码<input type="password" name="password"><br>
+        <br>
+<input type="submit" value="注册">
+</form>
+
+</body>
+</html>
+```
+
+
 
 ![1623313419340](1623313419340.png)
 
@@ -34,7 +75,54 @@
 
 ![1623325499441](1623325499441.png)
 
-ok，JavaScript能干的事也完成的差不多了，最后轮到PHP了，在用户点击注册提交数据之后，浏览器会把表单信息传递给服务器端register.php脚本来处理，这部分脚本需要做什么呢？需要拿着用户输入的账户去数据库friends表中比对是否早已经存在，如果存在则返回给客户端账户已经被注册的消息，让用户换一个账户，如果不存在则将用户的账户密码信息存入表中并返回注册成功的消息，但做这些的前提是先用PHP连接MySQL，能够对数据库执行sql语句，所以该脚本共需要完成这么三件事即可
+ok，JavaScript能干的事也完成的差不多了，最后轮到PHP了，在用户点击注册提交数据之后，浏览器会把表单信息传递给服务器端php脚本来处理，这部分脚本需要做什么呢？需要拿着用户输入的账户去数据库friends表中比对是否早已经存在，如果存在则返回给客户端账户已经被注册的消息，让用户换一个账户，如果不存在则将用户的账户密码信息存入表中并返回注册成功的消息，但做这些的前提是先用PHP连接MySQL，能够对数据库执行sql语句，所以总结下来php脚本共需要完成这么三件事即可
+
+mysql_connect.php
+
+```php
+<?php
+$servername="localhost";
+$username="root";
+$password="123456";
+$dbname="test";
+
+$conn=new mysqli($servername,$username,$password,$dbname);
+if($conn->connect_error){
+  die("连接失败：".$conn->connect_error);
+}
+echo "连接成功";
+?>
+
+```
+
+register.php
+
+```php
+<?php
+include './mysql_connect.php';
+
+$name=$_POST["username"];
+$pwd=$_POST["password"];
+echo "服务器端已经获取注册信息";
+
+$sql="SELECT name FROM friends where name='$name';";
+$result=$conn->query($sql);
+if($result->num_rows > 0){
+  echo "该用户已经存在";
+}else{
+  echo "该用户不存在";
+  $sql="INSERT INTO friends (name,passwd) VALUES ('$name','$pwd');";
+  if($conn->query($sql) == TRUE){
+    echo "插入成功";
+  }else{
+    echo "插入失败";
+  }
+}
+$conn->close();
+?>
+```
+
+## 0x03 SQL注入原理
 
 
 
