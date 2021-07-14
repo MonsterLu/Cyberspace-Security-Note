@@ -1,5 +1,3 @@
-dict1 = ['A','B','C','D']
+dict1 = ['A','B','C','D','A']
+print(set(dict1))
 
-for item in dict1:
-    print(type(item))
-print(int('A'))

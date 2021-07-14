@@ -10,6 +10,7 @@ def do_command(inputs:list)->list:
             print(item,"不符合1")
             inputs.remove(item)
             continue
+
         if(len(item) >=  2):
             if (item[1] not in dict2):
                 print(item, "不符合2")
@@ -28,6 +29,7 @@ class Origin():
     def __init__(self):
         self.x = 0
         self.y = 0
+
 o = Origin()
 
 #while True:

@@ -1,27 +1,35 @@
-class Solution:
-    def twoSum(self,nums,target)->list:
-        for i in range (len(nums)):
-            cha = target - nums[i]
-            if cha in nums:
-                j1 = nums.index(cha,i,len(nums))
-                if(j1 >= 0 and j1 != i):
-                    return [i,j1]
-                j2 = nums.index(cha,0,len(nums))
-                if (j1 >= 0 and j2 != i):
-                    return [i, j2]
-                #for j in range (0,len(nums)):
-                #    if ((nums[j] == cha) and (i != j)):
-                #return [i,j]
+def search(array,i,j,char)->list:
+    l = []
+    if(array[i][j-1] == char):
+        l.append(i)
+        l.append(j)
+        return l
+    if (array[i][j + 1] == char):
+        l.append(i)
+        l.append(j)
+        return l
+    if (array[i - 1][j] == char):
+        l.append(i)
+        l.append(j)
+        return l
+    if (array[i+1][j] == char):
+        l.append(i)
+        l.append(j)
+        return l
 
-nums = [3,3]
-target = 6
-list1 = Solution()
-print(list1.twoSum(nums,target))
-
-
-
-
-
-
-
-
+def start(array,str):
+    length = len(array)
+    length_str = len(str)
+    h = 1
+    flag = 0
+    for i in range(length):
+        for j in range(length):
+            if array[i][j] == str[0]:
+                list1 = search(array, i, j, str[i])
+                while(h < length_str):
+                    list2 = search(array, list1[0], list1[1], str[h + 1])
+                    if list2 != None:
+                        flag = 1
+                    if list2 == None:
+                        flag = 0
+                    h = h + 1
